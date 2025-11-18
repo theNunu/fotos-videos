@@ -14,11 +14,6 @@ class News extends Model
         'file_id',
         'title',
         'description',
-        // 'original_name',
-        // 'stored_name',
-        // 'mime_type',
-        // 'size',
-        // 'path'
     ];
 
     protected static function boot()
@@ -30,5 +25,16 @@ class News extends Model
                 $model->new_id = Str::uuid()->toString();
             }
         });
+    }
+
+       // imágenes adicionales (muchos a muchos)
+    public function imagenes()
+    {
+        return $this->belongsToMany(
+            File::class,
+            'news_files',
+            'new_id',
+            'file_id'
+        );
     }
 }

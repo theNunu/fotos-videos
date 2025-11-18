@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+
 class File extends Model
 {
-    
+
     protected $primaryKey = 'file_id';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -29,5 +30,15 @@ class File extends Model
                 $model->file_id = Str::uuid()->toString();
             }
         });
+    }
+
+    public function newsImagenes()
+    {
+        return $this->belongsToMany(
+            News::class,
+            'news_files',
+            'file_id',
+            'new_id'
+        );
     }
 }

@@ -27,10 +27,14 @@ class StoreNews extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'file_id' => 'required|exists:files,file_id',
+
+            // este campo NO existe en la tabla, solo se usa en runtime
+            'imagenes' => 'required|array',
+            'imagenes.*' => 'exists:files,file_id',
         ];
     }
 
-        protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
             'success' => false,

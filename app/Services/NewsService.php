@@ -16,6 +16,20 @@ class NewsService
     public function create(array $data)
     {
         // dd($data);
-        return $this->newsRepository->store($data);
+        // return $this->newsRepository->store($data);
+
+        // crear noticia
+        $news = $this->newsRepository->store([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'file_id' => $data['file_id'] ?? null,
+        ]);
+
+        // asignar imágenes adicionales (tabla pivote)
+        if (!empty($data['imagenes'])) {
+            $news->imagenes()->sync($data['imagenes']);
+        }
+
+        return $news;
     }
 }
