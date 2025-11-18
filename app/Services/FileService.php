@@ -18,6 +18,11 @@ class FileService
         return "hola desde servicce";
     }
 
+     public function index()
+    {
+        return $this->fileRepository->all();
+    }
+
     public function uploadFile($uploadedFile)
     {
         // dd('ppp');

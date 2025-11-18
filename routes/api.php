@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 Route::get('any', [FileController::class, 'any']);
+Route::get('files', [FileController::class, 'index']);
 
 Route::post('files/upload', [FileController::class, 'upload']);
 Route::get('/files/{id}', [FileController::class, 'show']);

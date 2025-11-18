@@ -20,6 +20,13 @@ class FileController extends Controller
         return $this->fileService->any();
     }
 
+    public function index()
+    {
+        // return $this->fileService->index();
+        $files = $this->fileService->index();
+    return view('files.index', compact('files'));
+    }
+
     public function upload(Request $request)
     {
         // dd('qwqqw');

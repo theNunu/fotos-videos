@@ -6,12 +6,9 @@ use App\Models\File;
 
 class FileRepository
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+    public function all()
     {
-        //
+        return File::all();
     }
 
      public function store(array $data)
