@@ -2,9 +2,15 @@
 
 namespace App\Http\Requests;
 
+use App\FileRelationType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+
+use Illuminate\Validation\Rule;
+
+// Importa el Enum de FileType
+use App\Enums\FileType;
 
 class StoreNews extends FormRequest
 {
@@ -31,11 +37,24 @@ class StoreNews extends FormRequest
             // este campo NO existe en la tabla, solo se usa en runtime
             // 'imagenes' => 'array',
             // 'imagenes.*' => 'exists:files,file_id',
-            'images' => 'array',
-            'images.*' => 'exists:files,file_id',
 
-            'videos' => 'array',
-            'videos.*' => 'exists:files,file_id',
+            // 'images' => 'array',
+            // 'images.*' => 'exists:files,file_id',
+
+            // 'videos' => 'array',
+            // 'videos.*' => 'exists:files,file_id',
+            
+        'images' => 'array',
+        'images.*' => [
+            'uuid',
+            Rule::exists('files', 'file_id')->where('file_type', FileRelationType::IMAGE)
+        ],
+
+        'videos' => 'array',
+        'videos.*' => [
+            'uuid',
+            Rule::exists('files', 'file_id')->where('file_type', FileRelationType::VIDEO)
+        ],
         ];
     }
 
