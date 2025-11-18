@@ -29,8 +29,13 @@ class StoreNews extends FormRequest
             'file_id' => 'required|exists:files,file_id',
 
             // este campo NO existe en la tabla, solo se usa en runtime
-            'imagenes' => 'required|array',
-            'imagenes.*' => 'exists:files,file_id',
+            // 'imagenes' => 'array',
+            // 'imagenes.*' => 'exists:files,file_id',
+            'images' => 'array',
+            'images.*' => 'exists:files,file_id',
+
+            'videos' => 'array',
+            'videos.*' => 'exists:files,file_id',
         ];
     }
 

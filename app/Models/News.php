@@ -35,6 +35,6 @@ class News extends Model
             'news_files',
             'new_id',
             'file_id'
-        );
+        )->withPivot('type');
     }
 }

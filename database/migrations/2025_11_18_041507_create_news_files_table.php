@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('news_file_id');
             $table->string('new_id');
             $table->string('file_id');
+            $table->string('type');
 
             $table->foreign('new_id')->references('new_id')->on('news')->cascadeOnDelete();
             $table->foreign('file_id')->references('file_id')->on('files')->cascadeOnDelete();
