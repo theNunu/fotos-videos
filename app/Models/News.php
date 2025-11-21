@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+
 class News extends Model
 {
     protected $primaryKey = 'new_id';
@@ -27,8 +28,15 @@ class News extends Model
         });
     }
 
-       // imágenes adicionales (muchos a muchos)
-    public function imagenes()
+    // 🔹 Relación con un file principal (portada o archivo único)
+    public function files()
+    {
+        return $this->belongsTo(File::class, 'file_id', 'file_id');
+    }
+
+    // imágenes adicionales (muchos a muchos) 
+    // 🔹 Relación con muchos files a través de la tabla pivote news_files
+    public function newsFiles()
     {
         return $this->belongsToMany(
             File::class,
@@ -36,5 +44,16 @@ class News extends Model
             'new_id',
             'file_id'
         )->withPivot('type');
+    }
+    // 🔹 Para filtrar solo imágenes 
+    public function images()
+    {
+        return $this->newsFiles()->wherePivot('type', 'image');
+    }
+
+    // 🔹 Para filtrar solo videos
+    public function videos()
+    {
+        return $this->newsFiles()->wherePivot('type', 'video');
     }
 }

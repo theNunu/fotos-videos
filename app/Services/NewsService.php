@@ -32,7 +32,7 @@ class NewsService
         // Insertar imágenes (type = image)
         if (!empty($data['images'])) {
             foreach ($data['images'] as $fileId) {
-                $news->imagenes()->attach($fileId, [
+                $news->newsFiles()->attach($fileId, [
                     'type' => FileRelationType::IMAGE->value
                 ]);
             }
@@ -41,12 +41,17 @@ class NewsService
         // Insertar videos (type = video)
         if (!empty($data['videos'])) {
             foreach ($data['videos'] as $fileId) {
-                $news->imagenes()->attach($fileId, [
+                $news->newsFiles()->attach($fileId, [
                     'type' => FileRelationType::VIDEO->value
                 ]);
             }
         }
 
         return $news;
+    }
+
+    public function show(string $id)
+    {
+        return $this->newsRepository->find($id);
     }
 }

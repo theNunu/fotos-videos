@@ -11,6 +11,7 @@ Route::get('files', [FileController::class, 'index']);
 Route::prefix('news')->group(function () {
     Route::get('', [NewsController::class, 'index']);
     Route::post('create', [NewsController::class, 'create']);
+    Route::get('{new_id}', [NewsController::class, 'show']);
 
 });
 

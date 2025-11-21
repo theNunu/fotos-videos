@@ -24,6 +24,13 @@ class NewsController extends Controller
 
     public function index()
     {
-         return $this->newsService->index();
+        return $this->newsService->index();
+        //  $news = $this->newsService->index();
+        //  return view('news.index', compact('news'));
     }
+
+    public function show($new_id)
+    {
+         return $this->newsService->show($new_id);
+    }       
 }
