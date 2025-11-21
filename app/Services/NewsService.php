@@ -48,7 +48,7 @@ class NewsService
         }
 
         // 🔥 Recargar la noticia con las relaciones
-        $news->load(['files', 'images', 'videos']);
+        $news->load(['files', 'images', 'videos']); //ESTO ES CLAVE
 
         return $news;
     }
