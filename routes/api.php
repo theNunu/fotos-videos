@@ -12,6 +12,7 @@ Route::prefix('news')->group(function () {
     Route::get('', [NewsController::class, 'index']);
     Route::post('create', [NewsController::class, 'create']);
     Route::get('{new_id}', [NewsController::class, 'show']);
+    Route::put('{new_id}', [NewsController::class, 'update']);
 
 });
 

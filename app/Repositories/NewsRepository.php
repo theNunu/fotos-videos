@@ -13,10 +13,16 @@ class NewsRepository
         return News::with(['files', 'images', 'videos'])->get();
     }
 
-    
+
     public function store(array $data)
     {
         return News::create($data);
+    }
+
+    public function update(News $news, array $data)
+    {
+        $news->update($data);
+        return $news;
     }
 
     public function find(string $id)
