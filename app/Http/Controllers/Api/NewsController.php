@@ -21,4 +21,9 @@ class NewsController extends Controller
     {
         return $this->newsService->create($request->all());
     }
+
+    public function index()
+    {
+         return $this->newsService->index();
+    }
 }

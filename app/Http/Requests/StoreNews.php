@@ -33,29 +33,14 @@ class StoreNews extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'file_id' => 'required|exists:files,file_id',
+            'images' => 'array',
+            'images.*' => 'exists:files,file_id',
 
-            // este campo NO existe en la tabla, solo se usa en runtime
-            // 'imagenes' => 'array',
-            // 'imagenes.*' => 'exists:files,file_id',
-
-            // 'images' => 'array',
-            // 'images.*' => 'exists:files,file_id',
-
-            // 'videos' => 'array',
-            // 'videos.*' => 'exists:files,file_id',
-            
-        'images' => 'array',
-        'images.*' => [
-            'uuid',
-            Rule::exists('files', 'file_id')->where('file_type', FileRelationType::IMAGE)
-        ],
-
-        'videos' => 'array',
-        'videos.*' => [
-            'uuid',
-            Rule::exists('files', 'file_id')->where('file_type', FileRelationType::VIDEO)
-        ],
+            'videos' => 'array',
+            'videos.*' => 'exists:files,file_id',
         ];
+
+        // 
     }
 
     protected function failedValidation(Validator $validator)
