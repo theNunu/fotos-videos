@@ -10,7 +10,9 @@ class NewsRepository
     public function all()
     {
         // return News::get();
-        return News::with(['files', 'images', 'videos'])->get();
+        $news = News::with(['images', 'videos'])->get();
+        // dd($news);
+        return $news;
     }
 
 
