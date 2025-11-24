@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 class File extends Model
 {
+    protected $hidden = ['pivot']; // Oculta la relación pivote en las respuestas JSON
 
     protected $primaryKey = 'file_id';
     public $incrementing = false;
@@ -40,5 +41,24 @@ class File extends Model
             'file_id',
             'new_id'
         );
+    }
+
+    //generar una url
+
+    public function getPathAttribute($value)
+    {
+        return asset('storage/' . $value);
+    }
+
+    public function getOriginalNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
+    public function getMimeTypeAttribute($value)
+    {
+         //Un accessor se activa automáticamente si tu método cumple esta estructura:
+         // get{AttributeName}Attribute()
+        return strtoupper($value);
     }
 }

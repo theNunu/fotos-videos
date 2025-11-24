@@ -11,7 +11,7 @@ class NewsRepository
     {
         // return News::get();
         $news = News::with(['images', 'videos'])->get();
-        // dd($news);
+        // dd($news->images);
         return $news;
     }
 
