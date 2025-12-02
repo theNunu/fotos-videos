@@ -56,6 +56,69 @@ class News extends Model
     {
         return $this->newsFiles()->wherePivot('type', 'video');
     }
-
-    
 }
+
+
+//
+/*
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
+class News extends Model
+{
+    protected $primaryKey = 'new_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'file_id',
+        'title',
+        'description',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (!$model->new_id) {
+                $model->new_id = Str::uuid()->toString();
+            }
+        });
+    }
+
+    // Archivo principal
+    public function files()
+    {
+        return $this->belongsTo(File::class, 'file_id', 'file_id');
+    }
+
+    // 🔹 Relación directa con la tabla pivote
+    public function newsFiles()
+    {
+        return $this->hasMany(NewsFile::class, 'new_id', 'new_id');
+    }
+
+    // 🔹 Filtra solo imágenes (internas)
+    public function images()
+    {
+        return $this->newsFiles()->where('type', 'image');
+    }
+
+    // 🔹 Filtra videos internos y externos
+    public function videos()
+    {
+        return $this->newsFiles()->where('type', 'video');
+    }
+}
+
+
+
+
+
+*/

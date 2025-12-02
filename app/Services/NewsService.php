@@ -114,6 +114,60 @@ class NewsService
     }
 
 
+    /*
+    public function addMedia(array $request, string $id)
+{
+    $news = News::findOrFail($id);
+
+    $insertRows = [];
+
+    // IMAGEN INTERNA
+    if (!empty($request['images'])) {
+        $insertRows[] = [
+            'new_id' => $news->new_id,
+            'file_id' => $request['images'],
+            'type' => 'image',
+            'url_externo' => null,
+        ];
+    }
+
+    // VIDEO INTERNO O URL
+    if (!empty($request['videos'])) {
+
+        $value = $request['videos'];
+
+        $isUuid = Str::isUuid($value);
+        $isUrl  = filter_var($value, FILTER_VALIDATE_URL);
+
+        if (!$isUuid && !$isUrl) {
+            throw ValidationException::withMessages([
+                'videos' => ['El video debe ser un UUID o una URL válida'],
+            ]);
+        }
+
+        $insertRows[] = [
+            'new_id' => $news->new_id,
+            'file_id' => $isUuid ? $value : null,
+            'type' => 'video',
+            'url_externo' => $isUrl ? $value : null,
+        ];
+    }
+
+    // Insertar registros
+    foreach ($insertRows as $row) {
+        NewsFile::create($row);
+    }
+
+    // Recargar relaciones
+    return $news->load([
+        'images.file',
+        'videos.file',
+    ]);
+}
+
+    
+    */
+
     // public function update(string $id, array $data)
     // {
     //     $news = News::findOrFail($id);
