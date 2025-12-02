@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreMedia;
 use App\Http\Requests\StoreNews;
 use App\Http\Requests\UpdateNews;
 use App\Services\NewsService;
 use Illuminate\Http\Request;
+
 use Symfony\Component\HttpKernel\HttpCache\Store;
 
 class NewsController extends Controller
@@ -35,10 +37,18 @@ class NewsController extends Controller
         return $this->newsService->show($new_id);
     }
 
-    public function update(UpdateNews $request, $id)
+    // public function update(UpdateNews $request, $id)
+    // {
+    //     return response()->json(
+    //         $this->newsService->update($id, $request->validated()),
+    //         200
+    //     );
+    // }
+
+    public function addMedia(StoreMedia $request, $id)
     {
         return response()->json(
-            $this->newsService->update($id, $request->validated()),
+            $this->newsService->addMedia( $request->validated(), $id),
             200
         );
     }

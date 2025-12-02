@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 // Importa el Enum de FileType
 use App\Enums\FileType;
 
-class StoreNews extends FormRequest
+class StoreMedia extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,14 +30,8 @@ class StoreNews extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'file_id' => 'required|exists:files,file_id',
-            // 'images' => 'array',
-            // 'images.*' => 'exists:files,file_id',
-
-            // 'videos' => 'array',
-            // 'videos.*' => 'exists:files,file_id',
+            'images' => 'nullable|uuid|exists:files,file_id',
+            'videos' => 'nullable|uuid|exists:files,file_id',
         ];
 
         // 

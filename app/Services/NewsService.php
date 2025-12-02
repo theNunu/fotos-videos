@@ -6,6 +6,7 @@ use App\FileRelationType;
 use App\Models\File;
 use App\Models\News;
 use App\Repositories\NewsRepository;
+use Illuminate\Http\Request;
 
 class NewsService
 {
@@ -31,25 +32,25 @@ class NewsService
         ]);
 
         // Insertar imágenes (type = image)
-        if (!empty($data['images'])) {
-            foreach ($data['images'] as $fileId) {
-                $news->newsFiles()->attach($fileId, [
-                    'type' => FileRelationType::IMAGE->value
-                ]);
-            }
-        }
+        // if (!empty($data['images'])) {
+        //     foreach ($data['images'] as $fileId) {
+        //         $news->newsFiles()->attach($fileId, [
+        //             'type' => FileRelationType::IMAGE->value
+        //         ]);
+        //     }
+        // }
 
         // Insertar videos (type = video)
-        if (!empty($data['videos'])) {
-            foreach ($data['videos'] as $fileId) {
-                $news->newsFiles()->attach($fileId, [
-                    'type' => FileRelationType::VIDEO->value
-                ]);
-            }
-        }
+        // if (!empty($data['videos'])) {
+        //     foreach ($data['videos'] as $fileId) {
+        //         $news->newsFiles()->attach($fileId, [
+        //             'type' => FileRelationType::VIDEO->value
+        //         ]);
+        //     }
+        // }
 
         // 🔥 Recargar la noticia con las relaciones
-        $news->load(['images', 'videos']); //ESTO ES CLAVE
+        // $news->load(['images', 'videos']); //ESTO ES CLAVE
 
         return $news;
     }
@@ -59,54 +60,79 @@ class NewsService
         return $this->newsRepository->find($id);
     }
 
-    public function update(string $id, array $data)
+    public function addMedia(array $request, string $id)
     {
         $news = News::findOrFail($id);
 
-        // 1. Actualizar campos normales
-        $news->update($data);
+        // Preparamos los arrays que se enviarán al sync
+        $syncData = [];
 
-        // ---------------------------------------------------
-        // 2. Actualizar IMÁGENES
-        // ---------------------------------------------------
-        if (isset($data['images'])) {
-
-            // Obtener IDs actuales de tipo imagen
-            $currentImageIds = $news->images()->pluck('files.file_id')->toArray();
-
-            // Quitar las imágenes actuales
-            if (!empty($currentImageIds)) {
-                $news->newsFiles()->detach($currentImageIds);
-            }
-
-            // Agregar las nuevas
-            foreach ($data['images'] as $fileId) {
-                $news->newsFiles()->attach($fileId, ['type' => 'image']);
-            }
+        // Imagen
+        if (!empty($request['images'])) {
+            $syncData[$request['images']] = ['type' => 'image'];
         }
 
-        // ---------------------------------------------------
-        // 3. Actualizar VIDEOS
-        // ---------------------------------------------------
-        if (isset($data['videos'])) {
-
-            // Obtener IDs actuales de tipo video
-            $currentVideoIds = $news->videos()->pluck('files.file_id')->toArray();
-
-            // Quitar los videos actuales
-            if (!empty($currentVideoIds)) {
-                $news->newsFiles()->detach($currentVideoIds);
-            }
-
-            // Agregar los nuevos
-            foreach ($data['videos'] as $fileId) {
-                $news->newsFiles()->attach($fileId, ['type' => 'video']);
-            }
+        // Video
+        if (!empty($request['videos'])) {
+            $syncData[$request['videos']] = ['type' => 'video'];
         }
 
-        // 4. Recargar relaciones correctamente
-        $news->load(['files', 'images', 'videos']);
+        // AHORA SÍ → SYNC REAL SOBRE newsFiles()
+        $news->newsFiles()->attach($syncData);
 
-        return $news;
+        // Recargar relaciones filtradas
+        return $news->load(['images', 'videos']);
     }
+
+
+    // public function update(string $id, array $data)
+    // {
+    //     $news = News::findOrFail($id);
+
+    //     // 1. Actualizar campos normales
+    //     $news->update($data);
+
+    //     // ---------------------------------------------------
+    //     // 2. Actualizar IMÁGENES
+    //     // ---------------------------------------------------
+    //     if (isset($data['images'])) {
+
+    //         // Obtener IDs actuales de tipo imagen
+    //         $currentImageIds = $news->images()->pluck('files.file_id')->toArray();
+
+    //         // Quitar las imágenes actuales
+    //         if (!empty($currentImageIds)) {
+    //             $news->newsFiles()->detach($currentImageIds);
+    //         }
+
+    //         // Agregar las nuevas
+    //         foreach ($data['images'] as $fileId) {
+    //             $news->newsFiles()->attach($fileId, ['type' => 'image']);
+    //         }
+    //     }
+
+    //     // ---------------------------------------------------
+    //     // 3. Actualizar VIDEOS
+    //     // ---------------------------------------------------
+    //     if (isset($data['videos'])) {
+
+    //         // Obtener IDs actuales de tipo video
+    //         $currentVideoIds = $news->videos()->pluck('files.file_id')->toArray();
+
+    //         // Quitar los videos actuales
+    //         if (!empty($currentVideoIds)) {
+    //             $news->newsFiles()->detach($currentVideoIds);
+    //         }
+
+    //         // Agregar los nuevos
+    //         foreach ($data['videos'] as $fileId) {
+    //             $news->newsFiles()->attach($fileId, ['type' => 'video']);
+    //         }
+    //     }
+
+    //     // 4. Recargar relaciones correctamente
+    //     $news->load(['files', 'images', 'videos']);
+
+    //     return $news;
+    // }
 }

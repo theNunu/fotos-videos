@@ -13,8 +13,9 @@ Route::prefix('news')->group(function () {
     Route::post('create', [NewsController::class, 'create']);
     Route::get('{new_id}', [NewsController::class, 'show']);
     Route::put('{new_id}', [NewsController::class, 'update']);
-
+    Route::post('{id}/add-media', [NewsController::class, 'addMedia']);
 });
+
 
 Route::post('files/upload', [FileController::class, 'upload']);
 Route::get('/files/{id}', [FileController::class, 'show']);
