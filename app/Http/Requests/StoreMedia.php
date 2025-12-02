@@ -31,7 +31,7 @@ class StoreMedia extends FormRequest
     {
         return [
             'images' => 'nullable|uuid|exists:files,file_id',
-            'videos' => 'nullable|uuid|exists:files,file_id',
+            'videos' => 'nullable',
         ];
 
         // 

@@ -7,6 +7,8 @@ use App\Models\File;
 use App\Models\News;
 use App\Repositories\NewsRepository;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 class NewsService
 {
@@ -64,23 +66,50 @@ class NewsService
     {
         $news = News::findOrFail($id);
 
-        // Preparamos los arrays que se enviarán al sync
-        $syncData = [];
+        $insertRows = [];
 
-        // Imagen
+        // IMAGEN (siempre UUID)
         if (!empty($request['images'])) {
-            $syncData[$request['images']] = ['type' => 'image'];
+            $insertRows[] = [
+                'new_id'  => $news->new_id,
+                'file_id' => $request['images'],
+                'type'    => 'image',
+                'url_externo'     => null,
+            ];
         }
 
-        // Video
+        // VIDEO (URL o UUID)
         if (!empty($request['videos'])) {
-            $syncData[$request['videos']] = ['type' => 'video'];
+
+            $value  = $request['videos'];
+            $isUuid = Str::isUuid($value);
+            $isUrl  = filter_var($value, FILTER_VALIDATE_URL);
+
+            if (!$isUuid && !$isUrl) {
+                throw ValidationException::withMessages([
+                    'videos' => ['El video debe ser un UUID válido o una URL válida.']
+                ]);
+            }
+
+            if ($isUuid && !File::where('file_id', $value)->exists()) {
+                throw ValidationException::withMessages([
+                    'videos' => ['El file_id proporcionado no existe.']
+                ]);
+            }
+
+            $insertRows[] = [
+                'new_id'  => $news->new_id,
+                'file_id' => $isUuid ? $value : null,
+                'type'    => 'video',
+                'url_externo'     => $isUrl ? $value : null,
+            ];
         }
 
-        // AHORA SÍ → SYNC REAL SOBRE newsFiles()
-        $news->newsFiles()->attach($syncData);
+        // INSERTAR DIRECTAMENTE EN news_files
+        foreach ($insertRows as $row) {
+            $news->newsFiles()->newPivot($row)->save();
+        }
 
-        // Recargar relaciones filtradas
         return $news->load(['images', 'videos']);
     }
 

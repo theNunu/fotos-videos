@@ -43,7 +43,7 @@ class News extends Model
             'news_files',
             'new_id',
             'file_id'
-        )->withPivot('type');
+        )->withPivot(['type', 'url_externo']);
     }
     // 🔹 Para filtrar solo imágenes 
     public function images()
@@ -56,4 +56,6 @@ class News extends Model
     {
         return $this->newsFiles()->wherePivot('type', 'video');
     }
+
+    
 }

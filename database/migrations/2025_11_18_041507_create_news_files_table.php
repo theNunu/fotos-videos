@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('news_files', function (Blueprint $table) {
             $table->id('news_file_id');
             $table->string('new_id');
-            $table->string('file_id');
+            $table->string('file_id')->nullable(); // ← IMPORTANTE;
             $table->string('type');
+            $table->string('url_externo')->nullable(); // ← para videos externos
 
             $table->foreign('new_id')->references('new_id')->on('news')->cascadeOnDelete();
             $table->foreign('file_id')->references('file_id')->on('files')->cascadeOnDelete();
